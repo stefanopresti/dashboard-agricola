@@ -4,24 +4,13 @@ import './index.css'
 import App from './App.jsx'
 import { Provider } from 'react-redux'
 import store from './redux/store.js'
-import Contacts from './pages/Contacts.jsx'
-import About from './pages/About.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import { createBrowserRouter, RouterProvider } from 'react-router'
-
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-  },
-  {
-    path: '/contacts',
-    element: <Contacts />,
-  },
-  {
-    path: '/about',
-    element: <About />,
   },
   {
     path: '/dashboard',

@@ -1,0 +1,114 @@
+/* Hero Section */
+.heroSection {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.heroTitle {
+  font-size: 4rem;
+  margin-bottom: 2rem;
+}
+
+.heroSubtitle {
+  font-size: 1.5rem;
+  color: var(--brutal-dark-gray);
+  font-weight: 600;
+  margin-bottom: 3rem;
+  max-width: 800px;
+  margin: 0 auto 3rem auto;
+}
+
+.heroButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Features Section */
+.featuresSection {
+  background-color: var(--brutal-white);
+}
+
+.featuresContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.featuresTitle {
+  font-size: 3rem;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 3rem;
+  text-transform: uppercase;
+  color: var(--brutal-black);
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+}
+
+
+
+/* About Section */
+.aboutContainer {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.aboutTitle {
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  color: var(--brutal-black);
+}
+
+.aboutContent {
+  font-size: 1.2rem;
+  color: var(--brutal-dark-gray);
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.aboutParagraph {
+  margin-bottom: 1.5rem;
+}
+
+.aboutParagraph:last-of-type {
+  margin-bottom: 2rem;
+}
+
+.aboutHighlight {
+  color: var(--brutal-black);
+}
+
+/* CTA Section */
+.ctaSection {
+  background-color: var(--brutal-black);
+}
+
+.ctaContainer {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ctaTitle {
+  font-size: 3rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  color: var(--brutal-white);
+}
+
+.ctaSubtitle {
+  font-size: 1.5rem;
+  color: var(--brutal-gray);
+  margin-bottom: 2rem;
+  font-weight: 600;
+} 

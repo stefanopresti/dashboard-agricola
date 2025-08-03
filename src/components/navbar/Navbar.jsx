@@ -10,12 +10,6 @@ function Navbar() {
         <li>
           <Navlink to="/dashboard">Dashboard</Navlink>
         </li>
-        <li>
-          <Navlink to="/contacts">Contacts</Navlink>
-        </li>
-        <li>
-          <Navlink to="/about">About</Navlink>
-        </li>
       </ul>
     </nav>
   );
