@@ -44,7 +44,6 @@ Il progetto soddisfa i seguenti requisiti specifici del project work:
 - **Filtri Metriche**: Controllo visibilità parametri specifici
 - **Rigenera Dati**: Generazione nuovo dataset con variazioni realistiche
 - **Statistiche in Tempo Reale**: Calcoli automatici su dati filtrati
-- **Design Brutal**: Interfaccia moderna con stile "brutal design"
 
 ## 🛠️ Tecnologie Utilizzate
 
@@ -209,8 +208,3 @@ Il progetto dimostra competenze in:
 ## 📄 Licenza
 
 Questo progetto è sotto licenza MIT. Vedi il file `LICENSE` per i dettagli.
-
----
-
-**Dashboard Agricola** - Simulatore intelligente per l'agricoltura moderna 🌱  
-*Project Work - Università Pegaso - Informatica per Aziende Digitali L-31*

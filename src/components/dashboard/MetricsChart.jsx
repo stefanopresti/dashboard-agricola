@@ -109,7 +109,7 @@ const MetricsChart = ({ data }) => {
         }}>
           Seleziona Metriche
         </h4>
-        <div className="brutal-grid" style={{ gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem' }}>
+        <div className="brutal-grid overflow-x-auto" style={{ gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem' }}>
           {Object.entries(metricConfigs).map(([key, config]) => (
             <label key={key} style={{ 
               display: 'flex', 

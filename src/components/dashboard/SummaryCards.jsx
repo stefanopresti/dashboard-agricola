@@ -33,7 +33,7 @@ const SummaryCards = ({ statistics }) => {
   ];
 
   return (
-    <div className="brutal-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', marginBottom: '3rem' }}>
+    <div className="brutal-grid overflow-x-auto" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', marginBottom: '3rem' }}>
       {cards.map((card, index) => (
         <div
           key={index}

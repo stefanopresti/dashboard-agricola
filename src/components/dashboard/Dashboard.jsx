@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import MetricsChart from './MetricsChart';
 import HarvestChart from './HarvestChart';
@@ -57,7 +57,7 @@ const Dashboard = () => {
         {/* Tabs per i grafici */}
         <div className="brutal-card brutal-section">
           <div className="brutal-tabs p-2">
-            <nav className="flex gap-2">
+            <nav className="flex gap-2 overflow-x-auto">
               {[
                 { id: 'overview', name: 'Panoramica', icon: '📊' },
                 { id: 'harvest', name: 'Raccolto', icon: '🌾' },
