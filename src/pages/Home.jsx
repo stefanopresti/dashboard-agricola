@@ -1,8 +1,18 @@
+/**
+ * Pagina Home
+ * 
+ * Pagina principale dell'applicazione che presenta il progetto Dashboard Agricola.
+ * Include diverse sezioni: Hero, Features, About e CTA (Call To Action).
+ */
+
 import Header from '../components/header/Header.jsx'
 import Navlink from '../components/navbar/Navlink.jsx'
 import FeatureCard from '../components/FeatureCard.jsx'
 
-// Array delle features
+/**
+ * Array delle funzionalità principali del simulatore
+ * Ogni feature ha un'icona, titolo e descrizione
+ */
 const features = [
   {
     icon: '📊',
@@ -36,12 +46,22 @@ const features = [
   }
 ]
 
+/**
+ * Home Component
+ * 
+ * Struttura della pagina home:
+ * 1. Header con navigazione
+ * 2. Hero Section - Introduzione e CTA principale
+ * 3. Features Section - Grid delle funzionalità
+ * 4. About Section - Descrizione dettagliata del progetto
+ * 5. CTA Section - Invito finale all'azione
+ */
 function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
       
-      {/* Hero Section */}
+      {/* Hero Section - Sezione di apertura con titolo principale e CTA */}
       <section className="bg-gradient-to-br from-emerald-50 via-white to-blue-50 py-32 md:py-48">
         <div className="max-w-7xl mx-auto px-10 sm:px-14 lg:px-20">
           <div className="max-w-5xl mx-auto text-center space-y-12">
@@ -51,6 +71,7 @@ function Home() {
             <p className="text-2xl md:text-3xl text-gray-600 mb-16 max-w-4xl mx-auto leading-relaxed">
               Il simulatore intelligente per il monitoraggio e l'analisi delle prestazioni aziendali agricole
             </p>
+            {/* Pulsanti CTA primari */}
             <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
               <Navlink to="/dashboard">
                 Testa subito la Dashboard
@@ -63,13 +84,14 @@ function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Features Section - Griglia delle funzionalità principali */}
       <section className="py-32 md:py-48 bg-white">
         <div className="max-w-7xl mx-auto px-10 sm:px-14 lg:px-20">
           <h2 className="text-5xl md:text-6xl font-bold text-center text-gray-900 mb-24">
             Potenzialità del Simulatore
           </h2>
           
+          {/* Grid responsive delle feature cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16">
             {features.map((feature, index) => (
               <FeatureCard
@@ -83,7 +105,7 @@ function Home() {
         </div>
       </section>
 
-      {/* About Section */}
+      {/* About Section - Descrizione dettagliata del progetto */}
       <section className="py-32 md:py-48 bg-gray-50">
         <div className="max-w-5xl mx-auto px-10 sm:px-14 lg:px-20 text-center">
           <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-16">
@@ -112,7 +134,7 @@ function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section - Invito finale all'azione */}
       <section className="py-32 md:py-48 bg-gradient-to-br from-emerald-600 to-emerald-700">
         <div className="max-w-5xl mx-auto px-10 sm:px-14 lg:px-20 text-center space-y-12">
           <h2 className="text-5xl md:text-6xl font-bold text-white mb-10">

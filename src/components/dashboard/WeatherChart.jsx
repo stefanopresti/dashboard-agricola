@@ -1,12 +1,40 @@
+/**
+ * Componente WeatherChart
+ * 
+ * Grafico combinato (linee + barre) per visualizzare i dati meteorologici.
+ * Mostra temperatura, ore di sole e precipitazioni su due assi Y distinti.
+ */
+
 import React from 'react';
 import { ComposedChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateFilters } from '../../redux/agriculturalSlice';
 
+/**
+ * WeatherChart Component
+ * 
+ * @param {Array} data - Array di dati giornalieri con parametri meteo
+ * 
+ * Visualizza 3 parametri meteorologici:
+ * - Temperatura (°C): Linea su asse Y sinistro
+ * - Ore di sole: Barra su asse Y destro
+ * - Precipitazioni (mm): Barra su asse Y destro
+ * 
+ * Caratteristiche:
+ * - Grafico combinato con linee e barre
+ * - Due assi Y per scale diverse
+ * - Filtri checkbox per mostrare/nascondere parametri
+ * - Statistiche aggregate (media temperatura, ore sole totali, giorni piovosi)
+ * - Tooltip personalizzato
+ */
 const WeatherChart = ({ data }) => {
   const dispatch = useDispatch();
   const { filters } = useSelector(state => state.agricultural);
 
+  /**
+   * Configurazione dei parametri meteorologici
+   * Specifica tipo di grafico (line/bar), colore e filtro per ogni metrica
+   */
   const weatherMetrics = [
     {
       key: 'temperature',
@@ -31,15 +59,23 @@ const WeatherChart = ({ data }) => {
     }
   ];
 
-  // Filtra le metriche basandosi sui filtri attivi
+  /**
+   * Filtra i parametri basandosi sui filtri attivi
+   */
   const activeMetrics = weatherMetrics.filter(metric => filters[metric.filterKey]);
 
+  /**
+   * Gestisce il toggle dei filtri per mostrare/nascondere parametri
+   */
   const handleFilterToggle = (filterKey) => {
     dispatch(updateFilters({
       [filterKey]: !filters[filterKey]
     }));
   };
 
+  /**
+   * Tooltip personalizzato che mostra i dettagli meteo con unità di misura corrette
+   */
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
@@ -56,6 +92,7 @@ const WeatherChart = ({ data }) => {
     return null;
   };
 
+  // Calcolo statistiche meteorologiche
   const avgTemperature = data.reduce((sum, item) => sum + item.temperature, 0) / data.length;
   const avgSunHours = data.reduce((sum, item) => sum + item.sunHours, 0) / data.length;
   const totalRainfall = data.reduce((sum, item) => sum + item.rainfall, 0);
@@ -63,6 +100,7 @@ const WeatherChart = ({ data }) => {
 
   return (
     <div className="space-y-8">
+      {/* Header con titolo e contatore parametri attivi */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h3 className="text-3xl font-bold text-gray-900">
           Condizioni Meteorologiche
@@ -72,7 +110,7 @@ const WeatherChart = ({ data }) => {
         </div>
       </div>
 
-      {/* Filtri delle condizioni meteorologiche */}
+      {/* Pannello filtri per selezionare i parametri da visualizzare */}
       <div className="bg-gray-50 rounded-xl p-6 border-2 border-gray-200">
         <h4 className="text-base font-bold text-gray-900 mb-4">
           Seleziona Parametri Meteo
@@ -92,28 +130,42 @@ const WeatherChart = ({ data }) => {
         </div>
       </div>
       
+      {/* Grafico combinato con linee e barre */}
       <div className="h-[500px]">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+            {/* Griglia di sfondo */}
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            
+            {/* Asse X - Date */}
             <XAxis 
               dataKey="dateFormatted" 
               tick={{ fontSize: 12, fill: '#6b7280' }}
               interval="preserveStartEnd"
             />
+            
+            {/* Asse Y sinistro - Temperatura */}
             <YAxis 
               yAxisId="left"
               tick={{ fontSize: 12, fill: '#6b7280' }}
               label={{ value: 'Temperatura (°C)', angle: -90, position: 'insideLeft', style: { fill: '#6b7280' } }}
             />
+            
+            {/* Asse Y destro - Ore di sole / Precipitazioni */}
             <YAxis 
               yAxisId="right"
               orientation="right"
               tick={{ fontSize: 12, fill: '#6b7280' }}
               label={{ value: 'Ore di sole / Precipitazioni', angle: 90, position: 'insideRight', style: { fill: '#6b7280' } }}
             />
+            
+            {/* Tooltip personalizzato */}
             <Tooltip content={<CustomTooltip />} />
+            
+            {/* Legenda */}
             <Legend />
+            
+            {/* Renderizza linee o barre in base al tipo di metrica */}
             {activeMetrics.map(metric => {
               if (metric.type === 'line') {
                 return (
@@ -145,7 +197,9 @@ const WeatherChart = ({ data }) => {
         </ResponsiveContainer>
       </div>
       
+      {/* Grid con statistiche meteorologiche */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Card Temperatura */}
         {filters.showTemperature && (
           <div className="bg-gradient-to-br from-red-50 to-white rounded-xl p-6 border-2 border-red-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
             <div className="text-sm font-bold text-red-700 uppercase tracking-wide mb-3">
@@ -159,6 +213,8 @@ const WeatherChart = ({ data }) => {
             </div>
           </div>
         )}
+        
+        {/* Card Ore di Sole */}
         {filters.showSunHours && (
           <div className="bg-gradient-to-br from-amber-50 to-white rounded-xl p-6 border-2 border-amber-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
             <div className="text-sm font-bold text-amber-700 uppercase tracking-wide mb-3">
@@ -172,6 +228,8 @@ const WeatherChart = ({ data }) => {
             </div>
           </div>
         )}
+        
+        {/* Card Precipitazioni Totali */}
         {filters.showRainfall && (
           <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-6 border-2 border-blue-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
             <div className="text-sm font-bold text-blue-700 uppercase tracking-wide mb-3">
@@ -185,6 +243,8 @@ const WeatherChart = ({ data }) => {
             </div>
           </div>
         )}
+        
+        {/* Card Giorni Piovosi */}
         {filters.showRainfall && (
           <div className="bg-gradient-to-br from-cyan-50 to-white rounded-xl p-6 border-2 border-cyan-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
             <div className="text-sm font-bold text-cyan-700 uppercase tracking-wide mb-3">

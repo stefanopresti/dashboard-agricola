@@ -1,12 +1,42 @@
+/**
+ * Componente MetricsChart
+ * 
+ * Grafico lineare multi-metrica che visualizza diverse metriche agricole
+ * nello stesso grafico. Permette di attivare/disattivare singole metriche
+ * tramite checkboxes.
+ */
+
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateFilters } from '../../redux/agriculturalSlice';
 
+/**
+ * MetricsChart Component
+ * 
+ * @param {Array} data - Array di dati giornalieri da visualizzare
+ * 
+ * Visualizza simultaneamente fino a 5 metriche diverse:
+ * - Temperatura (°C)
+ * - Umidità aria (%)
+ * - Umidità terreno (%)
+ * - Raccolto (kg/ha)
+ * - Qualità (1-10)
+ * 
+ * Include:
+ * - Sistema di filtri per mostrare/nascondere singole metriche
+ * - Tooltip personalizzato con dettagli al passaggio del mouse
+ * - Legenda interattiva
+ * - Design responsive
+ */
 const MetricsChart = ({ data }) => {
   const dispatch = useDispatch();
   const { filters } = useSelector(state => state.agricultural);
 
+  /**
+   * Configurazione delle metriche disponibili
+   * Ogni metrica ha nome, colore, unità di misura e chiave del filtro
+   */
   const metricConfigs = {
     temperature: {
       name: 'Temperatura (°C)',
@@ -40,17 +70,26 @@ const MetricsChart = ({ data }) => {
     }
   };
 
-  // Filtra le metriche basandosi sui filtri attivi
+  /**
+   * Filtra le metriche basandosi sui filtri attivi nello store Redux
+   */
   const activeMetrics = Object.entries(metricConfigs).filter(([key, config]) => 
     filters[config.filterKey]
   );
 
+  /**
+   * Gestisce il toggle di una metrica (mostra/nascondi)
+   * @param {string} filterKey - Chiave del filtro da modificare
+   */
   const handleFilterToggle = (filterKey) => {
     dispatch(updateFilters({
       [filterKey]: !filters[filterKey]
     }));
   };
 
+  /**
+   * Tooltip personalizzato per visualizzare i dettagli al passaggio del mouse
+   */
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
@@ -69,6 +108,7 @@ const MetricsChart = ({ data }) => {
 
   return (
     <div className="space-y-12">
+      {/* Header con titolo e contatore metriche attive */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <h3 className="text-4xl font-bold text-gray-900">
           📊 Metriche Principali
@@ -78,7 +118,7 @@ const MetricsChart = ({ data }) => {
         </div>
       </div>
 
-      {/* Filtri delle metriche */}
+      {/* Pannello filtri per selezionare le metriche da visualizzare */}
       <div className="bg-gradient-to-br from-gray-50 to-white rounded-3xl p-6 border-2 border-gray-200 shadow-lg">
         <h4 className="text-2xl font-bold text-gray-900 mb-8">
           🎯 Seleziona Metriche
@@ -98,18 +138,30 @@ const MetricsChart = ({ data }) => {
         </div>
       </div>
       
+      {/* Container del grafico */}
       <div className="h-[600px] bg-white rounded-3xl p-8 border-2 border-gray-200 shadow-lg">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+            {/* Griglia di sfondo */}
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            
+            {/* Asse X - Date */}
             <XAxis 
               dataKey="dateFormatted" 
               tick={{ fontSize: 12, fill: '#6b7280' }}
               interval="preserveStartEnd"
             />
+            
+            {/* Asse Y - Valori */}
             <YAxis tick={{ fontSize: 12, fill: '#6b7280' }} />
+            
+            {/* Tooltip personalizzato */}
             <Tooltip content={<CustomTooltip />} />
+            
+            {/* Legenda */}
             <Legend />
+            
+            {/* Linee per ogni metrica attiva */}
             {activeMetrics.map(([metricKey, config]) => (
               <Line
                 key={metricKey}

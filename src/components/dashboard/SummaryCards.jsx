@@ -1,6 +1,33 @@
+/**
+ * Componente SummaryCards
+ * 
+ * Visualizza un insieme di card con le statistiche principali della dashboard.
+ * Mostra dati aggregati come temperatura, umidità, raccolto e qualità.
+ */
+
 import React from 'react';
 
+/**
+ * SummaryCards Component
+ * 
+ * @param {Object} statistics - Oggetto contenente le statistiche da visualizzare:
+ *   - currentTemp: Temperatura attuale
+ *   - avgTemp: Temperatura media del periodo
+ *   - currentHumidity: Umidità attuale
+ *   - avgHumidity: Umidità media del periodo
+ *   - totalHarvest: Raccolto totale (kg/ha)
+ *   - dataPoints: Numero di giorni analizzati
+ *   - avgQuality: Qualità media del raccolto
+ * 
+ * Caratteristiche:
+ * - Grid responsive (1 colonna su mobile, 4 su desktop)
+ * - Ogni card ha icona, gradiente e statistiche
+ * - Effetti hover animati
+ */
 const SummaryCards = ({ statistics }) => {
+  /**
+   * Configurazione delle card con dati, stili e icone
+   */
   const cards = [
     {
       title: 'Temperatura Attuale',
@@ -40,14 +67,18 @@ const SummaryCards = ({ statistics }) => {
           className="bg-white rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 border-2 border-gray-200 hover:border-gray-300 group hover:-translate-y-2"
         >
           <div className="flex flex-col gap-6">
+            {/* Header con titolo e icona */}
             <div className="flex items-center justify-between">
               <p className="text-sm font-bold text-gray-500 uppercase tracking-widest">
                 {card.title}
               </p>
+              {/* Icona con gradiente animato */}
               <div className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${card.gradient} flex items-center justify-center text-4xl group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                 {card.icon}
               </div>
             </div>
+            
+            {/* Valore principale e sottotitolo */}
             <div>
               <p className="text-5xl font-bold text-gray-900 mb-4">
                 {card.value}

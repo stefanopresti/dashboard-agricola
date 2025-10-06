@@ -1,3 +1,13 @@
+/**
+ * Componente Dashboard Principale
+ * 
+ * Container principale della dashboard interattiva che gestisce:
+ * - Visualizzazione dei dati agricoli tramite grafici
+ * - Sistema di tabs per diversi tipi di analisi
+ * - Filtro del range di date
+ * - Card di riepilogo con statistiche
+ */
+
 import { useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import MetricsChart from './MetricsChart';
@@ -8,11 +18,26 @@ import WeatherChart from './WeatherChart';
 import DateRangeFilter from './DateRangeFilter';
 import SummaryCards from './SummaryCards';
 
+/**
+ * Dashboard Component
+ * 
+ * Gestisce lo stato e la visualizzazione della dashboard:
+ * - Recupera i dati dallo store Redux
+ * - Filtra i dati in base al range di date selezionato
+ * - Calcola statistiche aggregate per le summary cards
+ * - Gestisce la navigazione tra i diversi tab/grafici
+ */
 const Dashboard = () => {
+  // Recupera dati e range di date dallo store Redux
   const { data, dateRange } = useSelector(state => state.agricultural);
+  
+  // Stato locale per il tab attivo (overview, harvest, quality, soil, weather)
   const [activeTab, setActiveTab] = useState('overview');
 
-  // Filtra i dati in base al range di date
+  /**
+   * Filtra i dati in base al range di date selezionato
+   * Utilizza useMemo per evitare ricalcoli non necessari
+   */
   const filteredData = useMemo(() => {
     return data.filter(item => {
       const itemDate = new Date(item.date);
@@ -22,7 +47,10 @@ const Dashboard = () => {
     });
   }, [data, dateRange]);
 
-  // Calcola statistiche per le card di riepilogo
+  /**
+   * Calcola statistiche aggregate per le summary cards
+   * Include: temperatura, umidità, raccolto totale e qualità media
+   */
   const statistics = useMemo(() => {
     if (filteredData.length === 0) return {};
 
@@ -43,6 +71,10 @@ const Dashboard = () => {
     };
   }, [filteredData]);
 
+  /**
+   * Configurazione dei tabs disponibili
+   * Ogni tab mostra un grafico diverso con dati specifici
+   */
   const tabs = [
     { id: 'overview', name: 'Panoramica', icon: '📊' },
     { id: 'harvest', name: 'Raccolto', icon: '🌾' },
@@ -54,14 +86,15 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 py-16 space-y-16">
-        {/* Filtro Date Range */}
+        {/* Filtro per selezionare il range di date */}
         <DateRangeFilter />
 
-        {/* Card di riepilogo */}
+        {/* Card di riepilogo con statistiche principali */}
         <SummaryCards statistics={statistics} />
 
-        {/* Tabs per i grafici */}
+        {/* Sistema di tabs per navigare tra i diversi grafici */}
         <div className="bg-white rounded-3xl shadow-2xl border-2 border-gray-200 overflow-hidden">
+          {/* Barra dei tabs */}
           <div className="border-b-2 border-gray-200 bg-gray-50">
             <nav className="flex overflow-x-auto p-8 gap-4">
               {tabs.map(tab => (
@@ -81,6 +114,7 @@ const Dashboard = () => {
             </nav>
           </div>
 
+          {/* Contenuto del tab attivo con grafico corrispondente */}
           <div className="p-6">
             {activeTab === 'overview' && (
               <div className="fade-in">

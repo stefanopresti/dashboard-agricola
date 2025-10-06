@@ -1,5 +1,28 @@
+/**
+ * Componente DateInput
+ * 
+ * Input personalizzato per la selezione delle date.
+ * Visualizza una data formattata e apre un calendario al click.
+ */
+
 import React from 'react';
 
+/**
+ * DateInput Component
+ * 
+ * @param {string} label - Etichetta dell'input (es. "Data Inizio")
+ * @param {string} value - Valore della data in formato YYYY-MM-DD
+ * @param {Function} onInputClick - Callback eseguito al click sull'input
+ * @param {Function} onCalendarToggle - Callback per aprire/chiudere il calendario
+ * @param {boolean} isCalendarOpen - Stato di apertura del calendario
+ * @param {ReactNode} children - Componente Calendar da renderizzare
+ * 
+ * Caratteristiche:
+ * - Input readonly con data formattata in italiano
+ * - Icona calendario cliccabile
+ * - Effetti hover e focus
+ * - Container relativo per posizionare il calendario
+ */
 const DateInput = ({ 
   label, 
   value, 
@@ -10,10 +33,14 @@ const DateInput = ({
 }) => {
   return (
     <div className="relative">
+      {/* Label dell'input */}
       <label className="block text-xl font-bold text-gray-900 mb-5">
         {label}
       </label>
+      
+      {/* Container dell'input con icona */}
       <div className="relative">
+        {/* Input readonly - apre il calendario al click */}
         <input
           type="text"
           value={new Date(value).toLocaleDateString('it-IT')}
@@ -22,6 +49,8 @@ const DateInput = ({
           onClick={onInputClick}
           aria-label={`Seleziona ${label.toLowerCase()}`}
         />
+        
+        {/* Icona calendario */}
         <button
           onClick={onCalendarToggle}
           className="absolute right-5 top-1/2 -translate-y-1/2 text-3xl hover:scale-125 transition-transform duration-200"
@@ -30,6 +59,8 @@ const DateInput = ({
           📅
         </button>
       </div>
+      
+      {/* Componente Calendar (passato come children) */}
       {children}
     </div>
   );

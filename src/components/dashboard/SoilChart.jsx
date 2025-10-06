@@ -1,12 +1,40 @@
+/**
+ * Componente SoilChart
+ * 
+ * Grafico lineare multi-metrica per visualizzare i parametri del terreno.
+ * Permette di monitorare pH, azoto (N), fosforo (P) e potassio (K) nel tempo.
+ */
+
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateFilters } from '../../redux/agriculturalSlice';
 
+/**
+ * SoilChart Component
+ * 
+ * @param {Array} data - Array di dati giornalieri con parametri del terreno
+ * 
+ * Visualizza 4 parametri fondamentali del terreno:
+ * - pH (5.5-7.5): Acidità/basicità del terreno
+ * - Azoto/N (mg/kg): Nutriente primario per crescita vegetativa
+ * - Fosforo/P (mg/kg): Nutriente per radici e fioritura
+ * - Potassio/K (mg/kg): Nutriente per frutti e resistenza
+ * 
+ * Caratteristiche:
+ * - Filtri checkbox per mostrare/nascondere singoli parametri
+ * - Statistiche aggregate (media e range) per ogni parametro
+ * - Tooltip personalizzato
+ * - Colori distintivi per ogni nutriente
+ */
 const SoilChart = ({ data }) => {
   const dispatch = useDispatch();
   const { filters } = useSelector(state => state.agricultural);
 
+  /**
+   * Configurazione dei parametri del terreno
+   * Ogni parametro ha chiave dati, nome, colore e filtro associato
+   */
   const soilMetrics = [
     {
       key: 'ph',
@@ -34,15 +62,23 @@ const SoilChart = ({ data }) => {
     }
   ];
 
-  // Filtra le metriche basandosi sui filtri attivi
+  /**
+   * Filtra i parametri basandosi sui filtri attivi
+   */
   const activeMetrics = soilMetrics.filter(metric => filters[metric.filterKey]);
 
+  /**
+   * Gestisce il toggle dei filtri per mostrare/nascondere parametri
+   */
   const handleFilterToggle = (filterKey) => {
     dispatch(updateFilters({
       [filterKey]: !filters[filterKey]
     }));
   };
 
+  /**
+   * Tooltip personalizzato per mostrare i valori dei parametri
+   */
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
@@ -59,6 +95,7 @@ const SoilChart = ({ data }) => {
     return null;
   };
 
+  // Calcola medie per ogni parametro
   const avgPH = data.reduce((sum, item) => sum + item.ph, 0) / data.length;
   const avgNitrogen = data.reduce((sum, item) => sum + item.nitrogen, 0) / data.length;
   const avgPhosphorus = data.reduce((sum, item) => sum + item.phosphorus, 0) / data.length;
@@ -66,6 +103,7 @@ const SoilChart = ({ data }) => {
 
   return (
     <div className="space-y-8">
+      {/* Header con titolo e contatore parametri attivi */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h3 className="text-3xl font-bold text-gray-900">
           Parametri del Terreno
@@ -75,7 +113,7 @@ const SoilChart = ({ data }) => {
         </div>
       </div>
 
-      {/* Filtri dei parametri del terreno */}
+      {/* Pannello filtri per selezionare i parametri da visualizzare */}
       <div className="bg-gray-50 rounded-xl p-6 border-2 border-gray-200">
         <h4 className="text-base font-bold text-gray-900 mb-4">
           Seleziona Parametri
@@ -95,18 +133,30 @@ const SoilChart = ({ data }) => {
         </div>
       </div>
       
+      {/* Grafico lineare dei parametri del terreno */}
       <div className="h-[500px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+            {/* Griglia di sfondo */}
             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+            
+            {/* Asse X - Date */}
             <XAxis 
               dataKey="dateFormatted" 
               tick={{ fontSize: 12, fill: '#6b7280' }}
               interval="preserveStartEnd"
             />
+            
+            {/* Asse Y - Valori */}
             <YAxis tick={{ fontSize: 12, fill: '#6b7280' }} />
+            
+            {/* Tooltip personalizzato */}
             <Tooltip content={<CustomTooltip />} />
+            
+            {/* Legenda */}
             <Legend />
+            
+            {/* Linee per ogni parametro attivo */}
             {activeMetrics.map(metric => (
               <Line
                 key={metric.key}
@@ -123,7 +173,9 @@ const SoilChart = ({ data }) => {
         </ResponsiveContainer>
       </div>
       
+      {/* Grid con statistiche per ogni parametro attivo */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Card pH Terreno */}
         {filters.showPH && (
           <div className="bg-gradient-to-br from-purple-50 to-white rounded-xl p-6 border-2 border-purple-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
             <div className="text-sm font-bold text-purple-700 uppercase tracking-wide mb-3">
@@ -137,6 +189,8 @@ const SoilChart = ({ data }) => {
             </div>
           </div>
         )}
+        
+        {/* Card Azoto */}
         {filters.showNitrogen && (
           <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-6 border-2 border-blue-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
             <div className="text-sm font-bold text-blue-700 uppercase tracking-wide mb-3">
@@ -150,6 +204,8 @@ const SoilChart = ({ data }) => {
             </div>
           </div>
         )}
+        
+        {/* Card Fosforo */}
         {filters.showPhosphorus && (
           <div className="bg-gradient-to-br from-amber-50 to-white rounded-xl p-6 border-2 border-amber-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
             <div className="text-sm font-bold text-amber-700 uppercase tracking-wide mb-3">
@@ -163,6 +219,8 @@ const SoilChart = ({ data }) => {
             </div>
           </div>
         )}
+        
+        {/* Card Potassio */}
         {filters.showPotassium && (
           <div className="bg-gradient-to-br from-emerald-50 to-white rounded-xl p-6 border-2 border-emerald-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
             <div className="text-sm font-bold text-emerald-700 uppercase tracking-wide mb-3">
