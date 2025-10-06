@@ -54,16 +54,10 @@ const MetricsChart = ({ data }) => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div style={{
-          backgroundColor: 'var(--brutal-white)',
-          padding: '1rem',
-          border: '3px solid var(--brutal-black)',
-          boxShadow: '4px 4px 0 var(--brutal-black)',
-          fontWeight: '600'
-        }}>
-          <p style={{ fontWeight: '900', marginBottom: '0.5rem', textTransform: 'uppercase' }}>{label}</p>
+        <div className="bg-white p-4 rounded-lg border-2 border-gray-200 shadow-lg">
+          <p className="font-bold text-gray-900 mb-2">{label}</p>
           {payload.map((entry, index) => (
-            <p key={index} style={{ color: entry.color, fontSize: '0.875rem' }}>
+            <p key={index} className="text-sm font-medium" style={{ color: entry.color }}>
               {entry.name}: {entry.value} {metricConfigs[entry.dataKey]?.unit}
             </p>
           ))}
@@ -74,73 +68,46 @@ const MetricsChart = ({ data }) => {
   };
 
   return (
-    <div style={{ marginBottom: '2rem' }}>
-      <div style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'space-between',
-        marginBottom: '2rem'
-      }}>
-        <h3 style={{ 
-          fontSize: '1.5rem', 
-          fontWeight: '900', 
-          textTransform: 'uppercase',
-          color: 'var(--brutal-black)'
-        }}>
-          Metriche Principali
+    <div className="space-y-12">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+        <h3 className="text-4xl font-bold text-gray-900">
+          📊 Metriche Principali
         </h3>
-        <div style={{ 
-          fontWeight: '700',
-          fontSize: '0.875rem',
-          color: 'var(--brutal-dark-gray)'
-        }}>
+        <div className="text-xl font-bold text-emerald-600 bg-emerald-50 px-6 py-3 rounded-2xl border-2 border-emerald-200 shadow-md">
           {activeMetrics.length} metriche attive
         </div>
       </div>
 
       {/* Filtri delle metriche */}
-      <div className="brutal-card" style={{ padding: '1.5rem', marginBottom: '2rem' }}>
-        <h4 style={{ 
-          fontSize: '1rem', 
-          fontWeight: '700', 
-          textTransform: 'uppercase',
-          marginBottom: '1rem',
-          color: 'var(--brutal-black)'
-        }}>
-          Seleziona Metriche
+      <div className="bg-gradient-to-br from-gray-50 to-white rounded-3xl p-6 border-2 border-gray-200 shadow-lg">
+        <h4 className="text-2xl font-bold text-gray-900 mb-8">
+          🎯 Seleziona Metriche
         </h4>
-        <div className="brutal-grid overflow-x-auto" style={{ gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
           {Object.entries(metricConfigs).map(([key, config]) => (
-            <label key={key} style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '0.75rem',
-              cursor: 'pointer',
-              fontWeight: '600',
-              fontSize: '0.875rem'
-            }}>
+            <label key={key} className="flex items-center gap-4 cursor-pointer group p-4 rounded-xl hover:bg-gray-100 transition-all duration-200">
               <input
                 type="checkbox"
                 checked={filters[config.filterKey]}
                 onChange={() => handleFilterToggle(config.filterKey)}
-                className="brutal-checkbox"
+                className="w-6 h-6 text-emerald-600 border-gray-300 rounded-lg focus:ring-emerald-500 cursor-pointer"
               />
-              <span>{config.name}</span>
+              <span className="text-lg font-semibold text-gray-700 group-hover:text-gray-900">{config.name}</span>
             </label>
           ))}
         </div>
       </div>
       
-      <div style={{ height: '400px' }}>
+      <div className="h-[600px] bg-white rounded-3xl p-8 border-2 border-gray-200 shadow-lg">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis 
               dataKey="dateFormatted" 
-              tick={{ fontSize: 12, fontWeight: '600' }}
+              tick={{ fontSize: 12, fill: '#6b7280' }}
               interval="preserveStartEnd"
             />
-            <YAxis tick={{ fontSize: 12, fontWeight: '600' }} />
+            <YAxis tick={{ fontSize: 12, fill: '#6b7280' }} />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
             {activeMetrics.map(([metricKey, config]) => (
@@ -149,9 +116,9 @@ const MetricsChart = ({ data }) => {
                 type="monotone"
                 dataKey={metricKey}
                 stroke={config.color}
-                strokeWidth={3}
-                dot={{ r: 4, fill: config.color }}
-                activeDot={{ r: 8, fill: config.color }}
+                strokeWidth={2}
+                dot={{ r: 3, fill: config.color }}
+                activeDot={{ r: 6, fill: config.color }}
                 name={config.name}
               />
             ))}

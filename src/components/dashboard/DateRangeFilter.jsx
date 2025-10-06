@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setDateRange } from '../../redux/agriculturalSlice';
 import Calendar from './Calendar';
 import DateInput from './DateInput';
-import styles from './DateRangeFilter.module.css';
 
 const DateRangeFilter = () => {
   const dispatch = useDispatch();
@@ -31,12 +30,12 @@ const DateRangeFilter = () => {
   const daysSelected = Math.ceil((new Date(dateRange.end) - new Date(dateRange.start)) / (1000 * 60 * 60 * 24)) + 1;
 
   return (
-    <div className="brutal-card brutal-section brutal-padding">
-      <h3 className={styles.dateRangeTitle}>
-        Filtro Temporale
+    <div className="bg-white rounded-3xl shadow-2xl border-2 border-gray-200 p-6">
+      <h3 className="text-4xl font-bold text-gray-900 mb-10">
+        📅 Filtro Temporale
       </h3>
       
-      <div className={styles.dateRangeGrid}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         <DateInput
           label="Data Inizio"
           value={dateRange.start}
@@ -68,10 +67,12 @@ const DateRangeFilter = () => {
         </DateInput>
       </div>
       
-      <div className={styles.dateRangeInfo}>
-        Periodo selezionato: {new Date(dateRange.start).toLocaleDateString('it-IT')} - {new Date(dateRange.end).toLocaleDateString('it-IT')} ({daysSelected} giorni)
+      <div className="mt-10 text-lg text-gray-600 flex flex-col sm:flex-row sm:items-center gap-4 p-6 bg-emerald-50 rounded-2xl border-2 border-emerald-200">
+        <span>
+          Periodo selezionato: <strong className="text-gray-900">{new Date(dateRange.start).toLocaleDateString('it-IT')} - {new Date(dateRange.end).toLocaleDateString('it-IT')}</strong> ({daysSelected} giorni)
+        </span>
         {data.length > 0 && (
-          <span className={styles.dateRangeDataStatus}>
+          <span className="text-emerald-700 font-bold">
             ✓ {data.length} punti dati generati automaticamente
           </span>
         )}

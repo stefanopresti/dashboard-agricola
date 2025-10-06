@@ -2,8 +2,8 @@ import Navlink from './Navlink';
 
 function Navbar() {
   return (
-    <nav className="brutal-nav">
-      <ul className="brutal-nav-list">
+    <nav>
+      <ul className="flex flex-col md:flex-row gap-2 md:gap-3">
         <li>
           <Navlink to="/">Home</Navlink>
         </li>

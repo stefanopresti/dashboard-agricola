@@ -23,12 +23,12 @@ const QualityChart = ({ data }) => {
       }
       
       return (
-        <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-semibold text-gray-800">{label}</p>
-          <p className="text-sm">
-            Qualità: <span className="font-semibold">{quality}/10</span>
+        <div className="bg-white p-4 border-2 border-gray-200 rounded-xl shadow-lg">
+          <p className="font-bold text-gray-900 mb-2">{label}</p>
+          <p className="text-sm font-medium text-gray-700">
+            Qualità: <span className="font-bold">{quality}/10</span>
           </p>
-          <p className={`text-sm ${color}`}>
+          <p className={`text-sm font-bold ${color}`}>
             Livello: {qualityLevel}
           </p>
         </div>
@@ -43,27 +43,27 @@ const QualityChart = ({ data }) => {
   const poorDays = data.filter(item => item.quality < 6).length;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-900">Qualità del Raccolto</h3>
-        <div className="text-sm text-gray-600">
+        <h3 className="text-3xl font-bold text-gray-900">Qualità del Raccolto</h3>
+        <div className="text-base font-semibold text-gray-600 bg-gray-100 px-4 py-2 rounded-lg">
           Media: {Math.round(avgQuality * 10) / 10}/10
         </div>
       </div>
       
-      <div className="h-96">
+      <div className="h-[500px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis 
               dataKey="dateFormatted" 
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: 12, fill: '#6b7280' }}
               interval="preserveStartEnd"
             />
             <YAxis 
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: 12, fill: '#6b7280' }}
               domain={[0, 10]}
-              label={{ value: 'Qualità (1-10)', angle: -90, position: 'insideLeft' }}
+              label={{ value: 'Qualità (1-10)', angle: -90, position: 'insideLeft', style: { fill: '#6b7280' } }}
             />
             <Tooltip content={<CustomTooltip />} />
             <ReferenceLine y={8} stroke="#10b981" strokeDasharray="3 3" />
@@ -81,31 +81,32 @@ const QualityChart = ({ data }) => {
         </ResponsiveContainer>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-          <div className="text-green-800 font-semibold">Eccellente (≥8)</div>
-          <div className="text-2xl font-bold text-green-600">{excellentDays} giorni</div>
-          <div className="text-sm text-green-700">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="bg-gradient-to-br from-green-50 to-white rounded-xl p-6 border-2 border-green-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+          <div className="text-sm font-bold text-green-700 uppercase tracking-wide mb-3">Eccellente (≥8)</div>
+          <div className="text-4xl font-bold text-green-600 mb-2">{excellentDays}</div>
+          <div className="text-xs text-green-700">
             {Math.round((excellentDays / data.length) * 100)}% del periodo
           </div>
         </div>
-        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-          <div className="text-blue-800 font-semibold">Buona (6-8)</div>
-          <div className="text-2xl font-bold text-blue-600">{goodDays} giorni</div>
-          <div className="text-sm text-blue-700">
+        <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-6 border-2 border-blue-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+          <div className="text-sm font-bold text-blue-700 uppercase tracking-wide mb-3">Buona (6-8)</div>
+          <div className="text-4xl font-bold text-blue-600 mb-2">{goodDays}</div>
+          <div className="text-xs text-blue-700">
             {Math.round((goodDays / data.length) * 100)}% del periodo
           </div>
         </div>
-        <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
-          <div className="text-yellow-800 font-semibold">Discreta (4-6)</div>
-          <div className="text-2xl font-bold text-yellow-600">
-            {data.filter(item => item.quality >= 4 && item.quality < 6).length} giorni
+        <div className="bg-gradient-to-br from-yellow-50 to-white rounded-xl p-6 border-2 border-yellow-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+          <div className="text-sm font-bold text-yellow-700 uppercase tracking-wide mb-3">Discreta (4-6)</div>
+          <div className="text-4xl font-bold text-yellow-600 mb-2">
+            {data.filter(item => item.quality >= 4 && item.quality < 6).length}
           </div>
+          <div className="text-xs text-yellow-700">giorni</div>
         </div>
-        <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-          <div className="text-red-800 font-semibold">Scarsa (&lt;4)</div>
-          <div className="text-2xl font-bold text-red-600">{poorDays} giorni</div>
-          <div className="text-sm text-red-700">
+        <div className="bg-gradient-to-br from-red-50 to-white rounded-xl p-6 border-2 border-red-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+          <div className="text-sm font-bold text-red-700 uppercase tracking-wide mb-3">Scarsa (&lt;4)</div>
+          <div className="text-4xl font-bold text-red-600 mb-2">{poorDays}</div>
+          <div className="text-xs text-red-700">
             {Math.round((poorDays / data.length) * 100)}% del periodo
           </div>
         </div>

@@ -43,11 +43,17 @@ const Dashboard = () => {
     };
   }, [filteredData]);
 
-  return (
-    <div className="min-h-screen" style={{ backgroundColor: 'var(--brutal-gray)' }}>
-      
+  const tabs = [
+    { id: 'overview', name: 'Panoramica', icon: '📊' },
+    { id: 'harvest', name: 'Raccolto', icon: '🌾' },
+    { id: 'quality', name: 'Qualità', icon: '⭐' },
+    { id: 'soil', name: 'Terreno', icon: '🌱' },
+    { id: 'weather', name: 'Meteo', icon: '🌤️' }
+  ];
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 py-16 space-y-16">
         {/* Filtro Date Range */}
         <DateRangeFilter />
 
@@ -55,55 +61,53 @@ const Dashboard = () => {
         <SummaryCards statistics={statistics} />
 
         {/* Tabs per i grafici */}
-        <div className="brutal-card brutal-section">
-          <div className="brutal-tabs p-2">
-            <nav className="flex gap-2 overflow-x-auto">
-              {[
-                { id: 'overview', name: 'Panoramica', icon: '📊' },
-                { id: 'harvest', name: 'Raccolto', icon: '🌾' },
-                { id: 'quality', name: 'Qualità', icon: '⭐' },
-                { id: 'soil', name: 'Terreno', icon: '🌱' },
-                { id: 'weather', name: 'Meteo', icon: '🌤️' }
-              ].map(tab => (
+        <div className="bg-white rounded-3xl shadow-2xl border-2 border-gray-200 overflow-hidden">
+          <div className="border-b-2 border-gray-200 bg-gray-50">
+            <nav className="flex overflow-x-auto p-8 gap-4">
+              {tabs.map(tab => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`brutal-tab ${activeTab === tab.id ? 'active' : ''}`}
+                  className={`flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-lg whitespace-nowrap transition-all duration-200 ${
+                    activeTab === tab.id
+                      ? 'bg-emerald-600 text-white shadow-xl scale-110'
+                      : 'bg-white text-gray-700 hover:bg-gray-100 border-2 border-gray-200 hover:border-emerald-300 hover:scale-105'
+                  }`}
                 >
-                  <span style={{ marginRight: '0.5rem' }}>{tab.icon}</span>
-                  {tab.name}
+                  <span className="text-2xl">{tab.icon}</span>
+                  <span className="hidden sm:inline">{tab.name}</span>
                 </button>
               ))}
             </nav>
           </div>
 
-          <div className="brutal-padding">
+          <div className="p-6">
             {activeTab === 'overview' && (
-              <div className="brutal-fade-in">
+              <div className="fade-in">
                 <MetricsChart data={filteredData} />
               </div>
             )}
             
             {activeTab === 'harvest' && (
-              <div className="brutal-fade-in">
+              <div className="fade-in">
                 <HarvestChart data={filteredData} />
               </div>
             )}
             
             {activeTab === 'quality' && (
-              <div className="brutal-fade-in">
+              <div className="fade-in">
                 <QualityChart data={filteredData} />
               </div>
             )}
             
             {activeTab === 'soil' && (
-              <div className="brutal-fade-in">
+              <div className="fade-in">
                 <SoilChart data={filteredData} />
               </div>
             )}
             
             {activeTab === 'weather' && (
-              <div className="brutal-fade-in">
+              <div className="fade-in">
                 <WeatherChart data={filteredData} />
               </div>
             )}

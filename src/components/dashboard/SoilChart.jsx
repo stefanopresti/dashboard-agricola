@@ -46,16 +46,10 @@ const SoilChart = ({ data }) => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div style={{
-          backgroundColor: 'var(--brutal-white)',
-          padding: '1rem',
-          border: '3px solid var(--brutal-black)',
-          boxShadow: '4px 4px 0 var(--brutal-black)',
-          fontWeight: '600'
-        }}>
-          <p style={{ fontWeight: '900', marginBottom: '0.5rem', textTransform: 'uppercase' }}>{label}</p>
+        <div className="bg-white p-4 rounded-lg border-2 border-gray-200 shadow-lg">
+          <p className="font-bold text-gray-900 mb-2">{label}</p>
           {payload.map((entry, index) => (
-            <p key={index} style={{ color: entry.color, fontSize: '0.875rem' }}>
+            <p key={index} className="text-sm font-medium" style={{ color: entry.color }}>
               {entry.name}: {entry.value}
             </p>
           ))}
@@ -71,73 +65,46 @@ const SoilChart = ({ data }) => {
   const avgPotassium = data.reduce((sum, item) => sum + item.potassium, 0) / data.length;
 
   return (
-    <div style={{ marginBottom: '2rem' }}>
-      <div style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'space-between',
-        marginBottom: '2rem'
-      }}>
-        <h3 style={{ 
-          fontSize: '1.5rem', 
-          fontWeight: '900', 
-          textTransform: 'uppercase',
-          color: 'var(--brutal-black)'
-        }}>
+    <div className="space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h3 className="text-3xl font-bold text-gray-900">
           Parametri del Terreno
         </h3>
-        <div style={{ 
-          fontWeight: '700',
-          fontSize: '0.875rem',
-          color: 'var(--brutal-dark-gray)'
-        }}>
+        <div className="text-base font-semibold text-gray-600 bg-gray-100 px-4 py-2 rounded-lg">
           {activeMetrics.length} parametri attivi
         </div>
       </div>
 
       {/* Filtri dei parametri del terreno */}
-      <div className="brutal-card" style={{ padding: '1.5rem', marginBottom: '2rem' }}>
-        <h4 style={{ 
-          fontSize: '1rem', 
-          fontWeight: '700', 
-          textTransform: 'uppercase',
-          marginBottom: '1rem',
-          color: 'var(--brutal-black)'
-        }}>
+      <div className="bg-gray-50 rounded-xl p-6 border-2 border-gray-200">
+        <h4 className="text-base font-bold text-gray-900 mb-4">
           Seleziona Parametri
         </h4>
-        <div className="brutal-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {soilMetrics.map((metric) => (
-            <label key={metric.key} style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '0.75rem',
-              cursor: 'pointer',
-              fontWeight: '600',
-              fontSize: '0.875rem'
-            }}>
+            <label key={metric.key} className="flex items-center gap-3 cursor-pointer group">
               <input
                 type="checkbox"
                 checked={filters[metric.filterKey]}
                 onChange={() => handleFilterToggle(metric.filterKey)}
-                className="brutal-checkbox"
+                className="w-5 h-5 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500 cursor-pointer"
               />
-              <span>{metric.name}</span>
+              <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{metric.name}</span>
             </label>
           ))}
         </div>
       </div>
       
-      <div style={{ height: '400px' }}>
+      <div className="h-[500px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis 
               dataKey="dateFormatted" 
-              tick={{ fontSize: 12, fontWeight: '600' }}
+              tick={{ fontSize: 12, fill: '#6b7280' }}
               interval="preserveStartEnd"
             />
-            <YAxis tick={{ fontSize: 12, fontWeight: '600' }} />
+            <YAxis tick={{ fontSize: 12, fill: '#6b7280' }} />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
             {activeMetrics.map(metric => (
@@ -146,9 +113,9 @@ const SoilChart = ({ data }) => {
                 type="monotone"
                 dataKey={metric.key}
                 stroke={metric.color}
-                strokeWidth={3}
-                dot={{ r: 4, fill: metric.color }}
-                activeDot={{ r: 8, fill: metric.color }}
+                strokeWidth={2}
+                dot={{ r: 3, fill: metric.color }}
+                activeDot={{ r: 6, fill: metric.color }}
                 name={metric.name}
               />
             ))}
@@ -156,55 +123,55 @@ const SoilChart = ({ data }) => {
         </ResponsiveContainer>
       </div>
       
-      <div className="brutal-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginTop: '2rem' }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {filters.showPH && (
-          <div className="brutal-card" style={{ padding: '1.5rem' }}>
-            <div style={{ fontWeight: '700', fontSize: '0.875rem', textTransform: 'uppercase', color: 'var(--brutal-dark-gray)' }}>
+          <div className="bg-gradient-to-br from-purple-50 to-white rounded-xl p-6 border-2 border-purple-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+            <div className="text-sm font-bold text-purple-700 uppercase tracking-wide mb-3">
               pH Terreno
             </div>
-            <div style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--brutal-black)' }}>
+            <div className="text-4xl font-bold text-gray-900 mb-2">
               {Math.round(avgPH * 10) / 10}
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--brutal-dark-gray)' }}>
+            <div className="text-xs text-gray-600">
               Range: {Math.min(...data.map(item => item.ph)).toFixed(1)} - {Math.max(...data.map(item => item.ph)).toFixed(1)}
             </div>
           </div>
         )}
         {filters.showNitrogen && (
-          <div className="brutal-card" style={{ padding: '1.5rem' }}>
-            <div style={{ fontWeight: '700', fontSize: '0.875rem', textTransform: 'uppercase', color: 'var(--brutal-dark-gray)' }}>
+          <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-6 border-2 border-blue-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+            <div className="text-sm font-bold text-blue-700 uppercase tracking-wide mb-3">
               Azoto
             </div>
-            <div style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--brutal-black)' }}>
-              {Math.round(avgNitrogen * 10) / 10} mg/kg
+            <div className="text-4xl font-bold text-gray-900 mb-2">
+              {Math.round(avgNitrogen * 10) / 10} <span className="text-lg text-gray-600">mg/kg</span>
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--brutal-dark-gray)' }}>
+            <div className="text-xs text-gray-600">
               Range: {Math.min(...data.map(item => item.nitrogen)).toFixed(1)} - {Math.max(...data.map(item => item.nitrogen)).toFixed(1)}
             </div>
           </div>
         )}
         {filters.showPhosphorus && (
-          <div className="brutal-card" style={{ padding: '1.5rem' }}>
-            <div style={{ fontWeight: '700', fontSize: '0.875rem', textTransform: 'uppercase', color: 'var(--brutal-dark-gray)' }}>
+          <div className="bg-gradient-to-br from-amber-50 to-white rounded-xl p-6 border-2 border-amber-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+            <div className="text-sm font-bold text-amber-700 uppercase tracking-wide mb-3">
               Fosforo
             </div>
-            <div style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--brutal-black)' }}>
-              {Math.round(avgPhosphorus * 10) / 10} mg/kg
+            <div className="text-4xl font-bold text-gray-900 mb-2">
+              {Math.round(avgPhosphorus * 10) / 10} <span className="text-lg text-gray-600">mg/kg</span>
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--brutal-dark-gray)' }}>
+            <div className="text-xs text-gray-600">
               Range: {Math.min(...data.map(item => item.phosphorus)).toFixed(1)} - {Math.max(...data.map(item => item.phosphorus)).toFixed(1)}
             </div>
           </div>
         )}
         {filters.showPotassium && (
-          <div className="brutal-card" style={{ padding: '1.5rem' }}>
-            <div style={{ fontWeight: '700', fontSize: '0.875rem', textTransform: 'uppercase', color: 'var(--brutal-dark-gray)' }}>
+          <div className="bg-gradient-to-br from-emerald-50 to-white rounded-xl p-6 border-2 border-emerald-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+            <div className="text-sm font-bold text-emerald-700 uppercase tracking-wide mb-3">
               Potassio
             </div>
-            <div style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--brutal-black)' }}>
-              {Math.round(avgPotassium * 10) / 10} mg/kg
+            <div className="text-4xl font-bold text-gray-900 mb-2">
+              {Math.round(avgPotassium * 10) / 10} <span className="text-lg text-gray-600">mg/kg</span>
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--brutal-dark-gray)' }}>
+            <div className="text-xs text-gray-600">
               Range: {Math.min(...data.map(item => item.potassium)).toFixed(1)} - {Math.max(...data.map(item => item.potassium)).toFixed(1)}
             </div>
           </div>

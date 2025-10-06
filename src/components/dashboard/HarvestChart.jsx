@@ -5,15 +5,9 @@ const HarvestChart = ({ data }) => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div style={{
-          backgroundColor: 'var(--brutal-white)',
-          padding: '1rem',
-          border: '3px solid var(--brutal-black)',
-          boxShadow: '4px 4px 0 var(--brutal-black)',
-          fontWeight: '600'
-        }}>
-          <p style={{ fontWeight: '900', marginBottom: '0.5rem', textTransform: 'uppercase' }}>{label}</p>
-          <p style={{ color: '#f59e0b', fontSize: '0.875rem', fontWeight: '700' }}>
+        <div className="bg-white p-4 rounded-lg border-2 border-gray-200 shadow-lg">
+          <p className="font-bold text-gray-900 mb-1">{label}</p>
+          <p className="text-sm font-semibold text-amber-600">
             Raccolto: {payload[0].value} kg/ha
           </p>
         </div>
@@ -23,42 +17,28 @@ const HarvestChart = ({ data }) => {
   };
 
   return (
-    <div style={{ marginBottom: '2rem' }}>
-      <div style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'space-between',
-        marginBottom: '2rem'
-      }}>
-        <h3 style={{ 
-          fontSize: '1.5rem', 
-          fontWeight: '900', 
-          textTransform: 'uppercase',
-          color: 'var(--brutal-black)'
-        }}>
+    <div className="space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h3 className="text-3xl font-bold text-gray-900">
           Andamento Raccolto
         </h3>
-        <div style={{ 
-          fontWeight: '700',
-          fontSize: '0.875rem',
-          color: 'var(--brutal-dark-gray)'
-        }}>
+        <div className="text-base font-semibold text-gray-600 bg-gray-100 px-4 py-2 rounded-lg">
           Totale: {data.reduce((sum, item) => sum + item.harvest, 0).toLocaleString()} kg/ha
         </div>
       </div>
       
-      <div style={{ height: '400px' }}>
+      <div className="h-[500px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis 
               dataKey="dateFormatted" 
-              tick={{ fontSize: 12, fontWeight: '600' }}
+              tick={{ fontSize: 12, fill: '#6b7280' }}
               interval="preserveStartEnd"
             />
             <YAxis 
-              tick={{ fontSize: 12, fontWeight: '600' }}
-              label={{ value: 'kg/ha', angle: -90, position: 'insideLeft', style: { fontWeight: '700' } }}
+              tick={{ fontSize: 12, fill: '#6b7280' }}
+              label={{ value: 'kg/ha', angle: -90, position: 'insideLeft', style: { fill: '#6b7280' } }}
             />
             <Tooltip content={<CustomTooltip />} />
             <Area
@@ -66,34 +46,34 @@ const HarvestChart = ({ data }) => {
               dataKey="harvest"
               stroke="#f59e0b"
               fill="#fef3c7"
-              strokeWidth={3}
+              strokeWidth={2}
             />
           </AreaChart>
         </ResponsiveContainer>
       </div>
       
-      <div className="brutal-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginTop: '2rem' }}>
-        <div className="brutal-card" style={{ padding: '1.5rem' }}>
-          <div style={{ fontWeight: '700', fontSize: '0.875rem', textTransform: 'uppercase', color: 'var(--brutal-dark-gray)' }}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-gradient-to-br from-amber-50 to-white rounded-xl p-6 border-2 border-amber-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+          <div className="text-sm font-bold text-amber-700 uppercase tracking-wide mb-3">
             Raccolto Massimo
           </div>
-          <div style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--brutal-black)' }}>
-            {Math.max(...data.map(item => item.harvest)).toLocaleString()} kg/ha
+          <div className="text-4xl font-bold text-gray-900">
+            {Math.max(...data.map(item => item.harvest)).toLocaleString()} <span className="text-xl text-gray-600">kg/ha</span>
           </div>
         </div>
-        <div className="brutal-card" style={{ padding: '1.5rem' }}>
-          <div style={{ fontWeight: '700', fontSize: '0.875rem', textTransform: 'uppercase', color: 'var(--brutal-dark-gray)' }}>
+        <div className="bg-gradient-to-br from-emerald-50 to-white rounded-xl p-6 border-2 border-emerald-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+          <div className="text-sm font-bold text-emerald-700 uppercase tracking-wide mb-3">
             Raccolto Medio
           </div>
-          <div style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--brutal-black)' }}>
-            {Math.round(data.reduce((sum, item) => sum + item.harvest, 0) / data.length).toLocaleString()} kg/ha
+          <div className="text-4xl font-bold text-gray-900">
+            {Math.round(data.reduce((sum, item) => sum + item.harvest, 0) / data.length).toLocaleString()} <span className="text-xl text-gray-600">kg/ha</span>
           </div>
         </div>
-        <div className="brutal-card" style={{ padding: '1.5rem' }}>
-          <div style={{ fontWeight: '700', fontSize: '0.875rem', textTransform: 'uppercase', color: 'var(--brutal-dark-gray)' }}>
+        <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-6 border-2 border-blue-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+          <div className="text-sm font-bold text-blue-700 uppercase tracking-wide mb-3">
             Giorni di Raccolto
           </div>
-          <div style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--brutal-black)' }}>
+          <div className="text-4xl font-bold text-gray-900">
             {data.filter(item => item.harvest > 0).length}
           </div>
         </div>

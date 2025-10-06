@@ -43,16 +43,10 @@ const WeatherChart = ({ data }) => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div style={{
-          backgroundColor: 'var(--brutal-white)',
-          padding: '1rem',
-          border: '3px solid var(--brutal-black)',
-          boxShadow: '4px 4px 0 var(--brutal-black)',
-          fontWeight: '600'
-        }}>
-          <p style={{ fontWeight: '900', marginBottom: '0.5rem', textTransform: 'uppercase' }}>{label}</p>
+        <div className="bg-white p-4 rounded-lg border-2 border-gray-200 shadow-lg">
+          <p className="font-bold text-gray-900 mb-2">{label}</p>
           {payload.map((entry, index) => (
-            <p key={index} style={{ color: entry.color, fontSize: '0.875rem' }}>
+            <p key={index} className="text-sm font-medium" style={{ color: entry.color }}>
               {entry.name}: {entry.value} {entry.dataKey === 'sunHours' ? 'ore' : entry.dataKey === 'rainfall' ? 'mm' : '°C'}
             </p>
           ))}
@@ -68,82 +62,55 @@ const WeatherChart = ({ data }) => {
   const rainyDays = data.filter(item => item.rainfall > 0).length;
 
   return (
-    <div style={{ marginBottom: '2rem' }}>
-      <div style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'space-between',
-        marginBottom: '2rem'
-      }}>
-        <h3 style={{ 
-          fontSize: '1.5rem', 
-          fontWeight: '900', 
-          textTransform: 'uppercase',
-          color: 'var(--brutal-black)'
-        }}>
+    <div className="space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <h3 className="text-3xl font-bold text-gray-900">
           Condizioni Meteorologiche
         </h3>
-        <div style={{ 
-          fontWeight: '700',
-          fontSize: '0.875rem',
-          color: 'var(--brutal-dark-gray)'
-        }}>
+        <div className="text-base font-semibold text-gray-600 bg-gray-100 px-4 py-2 rounded-lg">
           {activeMetrics.length} parametri attivi
         </div>
       </div>
 
       {/* Filtri delle condizioni meteorologiche */}
-      <div className="brutal-card" style={{ padding: '1.5rem', marginBottom: '2rem' }}>
-        <h4 style={{ 
-          fontSize: '1rem', 
-          fontWeight: '700', 
-          textTransform: 'uppercase',
-          marginBottom: '1rem',
-          color: 'var(--brutal-black)'
-        }}>
+      <div className="bg-gray-50 rounded-xl p-6 border-2 border-gray-200">
+        <h4 className="text-base font-bold text-gray-900 mb-4">
           Seleziona Parametri Meteo
         </h4>
-        <div className="brutal-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {weatherMetrics.map((metric) => (
-            <label key={metric.key} style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '0.75rem',
-              cursor: 'pointer',
-              fontWeight: '600',
-              fontSize: '0.875rem'
-            }}>
+            <label key={metric.key} className="flex items-center gap-3 cursor-pointer group">
               <input
                 type="checkbox"
                 checked={filters[metric.filterKey]}
                 onChange={() => handleFilterToggle(metric.filterKey)}
-                className="brutal-checkbox"
+                className="w-5 h-5 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500 cursor-pointer"
               />
-              <span>{metric.name}</span>
+              <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{metric.name}</span>
             </label>
           ))}
         </div>
       </div>
       
-      <div style={{ height: '400px' }}>
+      <div className="h-[500px]">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
             <XAxis 
               dataKey="dateFormatted" 
-              tick={{ fontSize: 12, fontWeight: '600' }}
+              tick={{ fontSize: 12, fill: '#6b7280' }}
               interval="preserveStartEnd"
             />
             <YAxis 
               yAxisId="left"
-              tick={{ fontSize: 12, fontWeight: '600' }}
-              label={{ value: 'Temperatura (°C)', angle: -90, position: 'insideLeft', style: { fontWeight: '700' } }}
+              tick={{ fontSize: 12, fill: '#6b7280' }}
+              label={{ value: 'Temperatura (°C)', angle: -90, position: 'insideLeft', style: { fill: '#6b7280' } }}
             />
             <YAxis 
               yAxisId="right"
               orientation="right"
-              tick={{ fontSize: 12, fontWeight: '600' }}
-              label={{ value: 'Ore di sole / Precipitazioni', angle: 90, position: 'insideRight', style: { fontWeight: '700' } }}
+              tick={{ fontSize: 12, fill: '#6b7280' }}
+              label={{ value: 'Ore di sole / Precipitazioni', angle: 90, position: 'insideRight', style: { fill: '#6b7280' } }}
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend />
@@ -156,9 +123,9 @@ const WeatherChart = ({ data }) => {
                     type="monotone"
                     dataKey={metric.key}
                     stroke={metric.color}
-                    strokeWidth={3}
-                    dot={{ r: 4, fill: metric.color }}
-                    activeDot={{ r: 8, fill: metric.color }}
+                    strokeWidth={2}
+                    dot={{ r: 3, fill: metric.color }}
+                    activeDot={{ r: 6, fill: metric.color }}
                     name={metric.name}
                   />
                 );
@@ -178,55 +145,55 @@ const WeatherChart = ({ data }) => {
         </ResponsiveContainer>
       </div>
       
-      <div className="brutal-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginTop: '2rem' }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {filters.showTemperature && (
-          <div className="brutal-card" style={{ padding: '1.5rem' }}>
-            <div style={{ fontWeight: '700', fontSize: '0.875rem', textTransform: 'uppercase', color: 'var(--brutal-dark-gray)' }}>
+          <div className="bg-gradient-to-br from-red-50 to-white rounded-xl p-6 border-2 border-red-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+            <div className="text-sm font-bold text-red-700 uppercase tracking-wide mb-3">
               Temperatura
             </div>
-            <div style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--brutal-black)' }}>
+            <div className="text-4xl font-bold text-gray-900 mb-2">
               {Math.round(avgTemperature * 10) / 10}°C
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--brutal-dark-gray)' }}>
+            <div className="text-xs text-gray-600">
               Range: {Math.min(...data.map(item => item.temperature)).toFixed(1)}°C - {Math.max(...data.map(item => item.temperature)).toFixed(1)}°C
             </div>
           </div>
         )}
         {filters.showSunHours && (
-          <div className="brutal-card" style={{ padding: '1.5rem' }}>
-            <div style={{ fontWeight: '700', fontSize: '0.875rem', textTransform: 'uppercase', color: 'var(--brutal-dark-gray)' }}>
+          <div className="bg-gradient-to-br from-amber-50 to-white rounded-xl p-6 border-2 border-amber-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+            <div className="text-sm font-bold text-amber-700 uppercase tracking-wide mb-3">
               Ore di Sole
             </div>
-            <div style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--brutal-black)' }}>
-              {Math.round(avgSunHours * 10) / 10} ore/giorno
+            <div className="text-4xl font-bold text-gray-900 mb-2">
+              {Math.round(avgSunHours * 10) / 10} <span className="text-lg text-gray-600">ore/giorno</span>
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--brutal-dark-gray)' }}>
+            <div className="text-xs text-gray-600">
               Totale: {Math.round(data.reduce((sum, item) => sum + item.sunHours, 0))} ore
             </div>
           </div>
         )}
         {filters.showRainfall && (
-          <div className="brutal-card" style={{ padding: '1.5rem' }}>
-            <div style={{ fontWeight: '700', fontSize: '0.875rem', textTransform: 'uppercase', color: 'var(--brutal-dark-gray)' }}>
+          <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl p-6 border-2 border-blue-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+            <div className="text-sm font-bold text-blue-700 uppercase tracking-wide mb-3">
               Precipitazioni
             </div>
-            <div style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--brutal-black)' }}>
-              {Math.round(totalRainfall * 10) / 10} mm
+            <div className="text-4xl font-bold text-gray-900 mb-2">
+              {Math.round(totalRainfall * 10) / 10} <span className="text-lg text-gray-600">mm</span>
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--brutal-dark-gray)' }}>
+            <div className="text-xs text-gray-600">
               {rainyDays} giorni di pioggia
             </div>
           </div>
         )}
         {filters.showRainfall && (
-          <div className="brutal-card" style={{ padding: '1.5rem' }}>
-            <div style={{ fontWeight: '700', fontSize: '0.875rem', textTransform: 'uppercase', color: 'var(--brutal-dark-gray)' }}>
+          <div className="bg-gradient-to-br from-cyan-50 to-white rounded-xl p-6 border-2 border-cyan-200 shadow-md hover:shadow-xl transition-all duration-200 hover:-translate-y-1">
+            <div className="text-sm font-bold text-cyan-700 uppercase tracking-wide mb-3">
               Giorni Piovosi
             </div>
-            <div style={{ fontSize: '2rem', fontWeight: '900', color: 'var(--brutal-black)' }}>
+            <div className="text-4xl font-bold text-gray-900 mb-2">
               {rainyDays}
             </div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--brutal-dark-gray)' }}>
+            <div className="text-xs text-gray-600">
               {Math.round((rainyDays / data.length) * 100)}% del periodo
             </div>
           </div>

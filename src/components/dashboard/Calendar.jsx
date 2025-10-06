@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay } from 'date-fns';
 import { it } from 'date-fns/locale';
-import styles from './DateRangeFilter.module.css';
 
 const Calendar = ({ selectedDate, onDateSelect, onClose, isOpen }) => {
   const [currentMonth, setCurrentMonth] = useState(selectedDate || new Date());
@@ -41,23 +40,23 @@ const Calendar = ({ selectedDate, onDateSelect, onClose, isOpen }) => {
   if (!isOpen) return null;
 
   return (
-    <div className={styles.calendarContainer} ref={calendarRef}>
-      <div className={styles.calendarCard}>
+    <div className="absolute z-50 mt-2 w-full md:w-80" ref={calendarRef}>
+      <div className="bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden">
         {/* Header del calendario */}
-        <div className={styles.calendarHeader}>
+        <div className="flex items-center justify-between px-4 py-3 bg-emerald-600 text-white">
           <button
             onClick={prevMonth}
-            className={styles.calendarNavBtn}
+            className="p-2 hover:bg-emerald-700 rounded-lg transition-colors duration-200 text-xl font-bold"
             aria-label="Mese precedente"
           >
             ‹
           </button>
-          <h3 className={styles.calendarTitle}>
+          <h3 className="text-lg font-bold capitalize">
             {format(currentMonth, 'MMMM yyyy', { locale: it })}
           </h3>
           <button
             onClick={nextMonth}
-            className={styles.calendarNavBtn}
+            className="p-2 hover:bg-emerald-700 rounded-lg transition-colors duration-200 text-xl font-bold"
             aria-label="Mese successivo"
           >
             ›
@@ -65,16 +64,16 @@ const Calendar = ({ selectedDate, onDateSelect, onClose, isOpen }) => {
         </div>
 
         {/* Giorni della settimana */}
-        <div className={styles.calendarWeekdays}>
+        <div className="grid grid-cols-7 gap-px p-2 bg-gray-50">
           {['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'].map(day => (
-            <div key={day} className={styles.calendarWeekday}>
+            <div key={day} className="text-center text-xs font-semibold text-gray-600 py-2">
               {day}
             </div>
           ))}
         </div>
 
         {/* Giorni del mese */}
-        <div className={styles.calendarDays}>
+        <div className="grid grid-cols-7 gap-1 p-2">
           {days.map(day => (
             <button
               key={day.toString()}
@@ -82,7 +81,11 @@ const Calendar = ({ selectedDate, onDateSelect, onClose, isOpen }) => {
                 onDateSelect(format(day, 'yyyy-MM-dd'));
                 onClose();
               }}
-              className={`${styles.calendarDay} ${isSameDay(day, selectedDate) ? styles.calendarDaySelected : ''}`}
+              className={`p-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+                isSameDay(day, selectedDate)
+                  ? 'bg-emerald-600 text-white shadow-md'
+                  : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200'
+              }`}
               aria-label={`Seleziona ${format(day, 'dd MMMM yyyy', { locale: it })}`}
             >
               {format(day, 'd')}
@@ -91,10 +94,10 @@ const Calendar = ({ selectedDate, onDateSelect, onClose, isOpen }) => {
         </div>
 
         {/* Footer */}
-        <div className={styles.calendarFooter}>
+        <div className="p-3 bg-gray-50 border-t border-gray-200 text-center">
           <button
             onClick={onClose}
-            className={styles.calendarCloseBtn}
+            className="px-6 py-2 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors duration-200"
           >
             Chiudi
           </button>
