@@ -126,7 +126,7 @@ Il simulatore utilizza un motore di simulazione avanzato che:
 
 ## 🎨 Design e UX
 
-### Stile Brutal Design
+### Stile Clean Moderno
 - **Interfaccia Moderna**: Design pulito e professionale
 - **Colori Semantici**: Codifica colore per tipologia dati
 - **Responsive Design**: Ottimizzato per mobile e desktop
